@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Your Recommendation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixFlic Recommendation</title>
 </head>
 <body>
     <h1>Recommended Movie</h1>
-    <p>{{ movie }}</p>
-    <a href="/">Back to Quiz</a>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% else %}
+        <h2>{{ title }}</h2>
+        <p>Release Date: {{ release_date }}</p>
+        <p>{{ overview }}</p>
+        {% if poster_path %}
+            <img src="{{ poster_path }}" alt="Movie Poster">
+        {% endif %}
+    {% endif %}
+    <a href="/">Take Quiz Again</a>
 </body>
 </html>
