@@ -4,19 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FixFlic Recommendation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #007BFF;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .movie-details {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        a {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Recommended Movie</h1>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% else %}
-        <h2>{{ title }}</h2>
-        <p>Release Date: {{ release_date }}</p>
-        <p>{{ overview }}</p>
-        {% if poster_path %}
-            <img src="{{ poster_path }}" alt="Movie Poster">
+
+    <h1>FixFlic Movie Recommendation</h1>
+
+    <div class="movie-details">
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% else %}
+            <h2>{{ title }}</h2>
+            <p><strong>Release Date:</strong> {{ release_date }}</p>
+            <p><strong>Overview:</strong> {{ overview }}</p>
+            
+            {% if poster_path %}
+                <img src="{{ poster_path }}" alt="Movie Poster">
+            {% endif %}
         {% endif %}
-    {% endif %}
-    <a href="/">Take Quiz Again</a>
+    </div>
+
+    <a href="/">Take the Quiz Again</a>
+
 </body>
 </html>
