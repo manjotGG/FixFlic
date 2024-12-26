@@ -4,21 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FixFlic Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .question-text {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
+
     <h1>FixFlic Quiz</h1>
+    
     <form action="/submit_quiz" method="POST">
         {% for i, q in enumerate(quiz) %}
-            <p>{{ q.question }}</p>
-            {% for j, option in enumerate(q.options) %}
-                <label>
-                    <input type="radio" name="{{ 'mood' if i == 0 else 'genre' if i == 1 else 'year' }}" value="{{ j + 1 }}" required>
-                    {{ option }}
-                </label>
-                <br>
-            {% endfor %}
+            <div class="question">
+                <p class="question-text">{{ q.question }}</p>
+                {% for j, option in enumerate(q.options) %}
+                    <label>
+                        <input type="radio" name="{{ 'mood' if i == 0 else 'genre' if i == 1 else 'year' }}" value="{{ j + 1 }}" required>
+                        {{ option }}
+                    </label><br>
+                {% endfor %}
+            </div>
         {% endfor %}
+        
         <button type="submit">Submit</button>
     </form>
+
 </body>
 </html>
