@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FixFlic - Movie Recommendation</title>
+</head>
+<body>
+    <h1>Welcome to FixFlic!</h1>
+    <form action="/recommend" method="post">
+        <h2>How is your mood today?</h2>
+        <select name="mood">
+            <option value="1">Happy</option>
+            <option value="2">Normal</option>
+            <option value="3">Sad</option>
+        </select>
+
+        <h2>What kind of movie do you like?</h2>
+        <select name="genre">
+            <option value="1">Comedy</option>
+            <option value="2">Action</option>
+            <option value="3">Comedy Romance</option>
+        </select>
+
+        <h2>Do you have any year preference?</h2>
+        <select name="year_pref">
+            <option value="1">No preference</option>
+            <option value="2">Late 90s</option>
+            <option value="3">Latest</option>
+        </select>
+
+        <button type="submit">Recommend a Movie</button>
+    </form>
+</body>
+</html>
