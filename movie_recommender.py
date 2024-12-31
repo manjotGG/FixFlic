@@ -1,9 +1,9 @@
 import requests
 import random
 
-API_KEY = "fd75f2cbedc1bf37544712100425c13f"
+TMDB_API_KEY = "fd75f2cbedc1bf37544712100425c13f"
 BASE_URL = "https://api.themoviedb.org/3"
-
+API_KEY = TMDB_API_KEY
 quiz = [
     {"question": "How is your mood today?", "options": ["Happy", "Normal", "Sad"]},
     {"question": "What kind of movie do you like?", "options": ["Comedy", "Action", "Comedy Romance"]},
@@ -58,6 +58,19 @@ def get_movie_details(movie_id):
         return response.json()
     return None
 
+# Mapping of provider names to URLs
+PROVIDER_URLS = {
+    "Netflix": "https://www.netflix.com",
+    "Amazon Prime Video": "https://www.amazon.com/Prime-Video",
+    "Disney+": "https://www.disneyplus.com",
+    "Hulu": "https://www.hulu.com",
+    "Apple TV+": "https://www.apple.com/tv/",
+    "Google Play Movies": "https://play.google.com/store/movies",
+    "iTunes": "https://www.apple.com/itunes",
+    "YouTube": "https://www.youtube.com",
+    # Add more mappings as needed
+}
+
 def get_watch_providers(movie_id):
     """Fetch watch providers for a movie from TMDb API."""
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/watch/providers"
@@ -76,10 +89,11 @@ def get_watch_providers(movie_id):
     if not region:
         return {"streaming": [], "rent": [], "buy": []}
 
+    # Extract providers and map their names to URLs
     providers = {
-        "streaming": [item["provider_name"] for item in region.get("flatrate", [])],
-        "rent": [item["provider_name"] for item in region.get("rent", [])],
-        "buy": [item["provider_name"] for item in region.get("buy", [])],
+        "streaming": [(item["provider_name"], PROVIDER_URLS.get(item["provider_name"], "#")) for item in region.get("flatrate", [])],
+        "rent": [(item["provider_name"], PROVIDER_URLS.get(item["provider_name"], "#")) for item in region.get("rent", [])],
+        "buy": [(item["provider_name"], PROVIDER_URLS.get(item["provider_name"], "#")) for item in region.get("buy", [])],
     }
 
     return providers

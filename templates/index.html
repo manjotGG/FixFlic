@@ -1,77 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Take the FixFlic Quiz to get personalized movie recommendations.">
+    <meta name="keywords" content="FixFlic, movie quiz, movie recommendations">
+    <meta name="author" content="FixFlic">
     <title>FixFlic Quiz</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s;
         }
+
         h1 {
-            color: #333;
+            color: #444;
             text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            font-weight: 600;
+            transition: color 0.5s;
         }
+
         form {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            max-width: 650px;
+            width: 100%;
+            transition: all 0.5s;
         }
+
         .question {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            transition: margin-bottom 0.5s;
         }
+
         label {
             font-size: 16px;
             margin-left: 10px;
+            color: #555;
+            cursor: pointer;
+            display: block;
+            transition: color 0.3s;
         }
+
         input[type="radio"] {
-            margin-right: 10px;
+            margin-right: 15px;
+            cursor: pointer;
         }
+
         button {
-            background-color: #007BFF;
+            background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
+            transition: background-color 0.3s, transform 0.3s;
         }
+
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
+
         .question-text {
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-weight: 500;
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .question-text span {
+            color: #007bff;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            form {
+                padding: 30px 20px;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <h1>FixFlic Quiz</h1>
-    
-    <form action="/submit_quiz" method="POST">
-        {% for i, q in enumerate(quiz) %}
+    <div>
+        <h1>FixFlic Quiz</h1>
+
+        <form action="/submit_quiz" method="POST" onsubmit="return showLoading();">
+            {% for i, q in enumerate(quiz) %}
             <div class="question">
-                <p class="question-text">{{ q.question }}</p>
+                <p class="question-text"><span>Q{{ i + 1 }}:</span> {{ q.question }}</p>
                 {% for j, option in enumerate(q.options) %}
-                    <label>
-                        <input type="radio" name="{{ 'mood' if i == 0 else 'genre' if i == 1 else 'year' }}" value="{{ j + 1 }}" required>
-                        {{ option }}
-                    </label><br>
+                <label>
+                    <input type="radio" name="{{ 'mood' if i == 0 else 'genre' if i == 1 else 'year' }}" value="{{ j + 1 }}" required>
+                    {{ option }}
+                </label>
                 {% endfor %}
             </div>
-        {% endfor %}
-        
-        <button type="submit">Submit</button>
-    </form>
+            {% endfor %}
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.body.style.backgroundColor = '#e0e0e0';
+            document.body.style.cursor = 'wait';
+            setTimeout(() => {
+                alert('Your responses are being submitted. Thank you!');
+            }, 1000);
+            return true;
+        }
+    </script>
 
 </body>
+
 </html>

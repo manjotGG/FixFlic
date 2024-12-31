@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixFlic Recommendation</title>
+    <meta name="description" content="Find the best movie recommendations and where to watch them.">
+    <meta name="keywords" content="movies, recommendations, streaming, buy, rent">
+    <meta name="author" content="FixFlic">
+    <title>FixFlic Movie Recommendation</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif, 'Helvetica Neue', Helvetica, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 20px;
@@ -64,6 +67,21 @@
             color: #333;
         }
 
+        .provider-link {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        .provider-link:hover {
+            background-color: #0056b3;
+        }
+
         a {
             display: inline-block;
             background-color: #007BFF;
@@ -77,6 +95,25 @@
 
         a:hover {
             background-color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            .movie-details {
+                padding: 15px;
+            }
+
+            h1, h2 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .provider-link, a {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -99,14 +136,26 @@
             <div class="providers">
                 <h3>Where to Watch:</h3>
                 {% if providers.streaming %}
-                    <p><strong>Streaming:</strong> {{ providers.streaming | join(", ") }}</p>
+                    <p><strong>Streaming:</strong></p>
+                    {% for provider, url in providers.streaming %}
+                        <a class="provider-link" href="{{ url }}" target="_blank">{{ provider }}</a><br>
+                    {% endfor %}
                 {% endif %}
+                
                 {% if providers.rent %}
-                    <p><strong>Rent:</strong> {{ providers.rent | join(", ") }}</p>
+                    <p><strong>Rent:</strong></p>
+                    {% for provider, url in providers.rent %}
+                        <a class="provider-link" href="{{ url }}" target="_blank">{{ provider }}</a><br>
+                    {% endfor %}
                 {% endif %}
+                
                 {% if providers.buy %}
-                    <p><strong>Buy:</strong> {{ providers.buy | join(", ") }}</p>
+                    <p><strong>Buy:</strong></p>
+                    {% for provider, url in providers.buy %}
+                        <a class="provider-link" href="{{ url }}" target="_blank">{{ provider }}</a><br>
+                    {% endfor %}
                 {% endif %}
+
                 {% if not providers.streaming and not providers.rent and not providers.buy %}
                     <p>Sorry, no platforms available at the moment.</p>
                 {% endif %}

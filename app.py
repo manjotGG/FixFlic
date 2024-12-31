@@ -19,15 +19,20 @@ def submit_quiz():
     # Fetch recommended movie
     movie = recommend_movie(genre, year)
     if movie:
+        # Get watch providers for the recommended movie
+        providers = get_watch_providers(movie["id"]) if "id" in movie else {"streaming": [], "rent": [], "buy": []}
+        
         return render_template(
             "result.html",
             title=movie["title"],
             release_date=movie.get("release_date", "Unknown"),
             overview=movie.get("overview", "No overview available."),
             poster_path=f"https://image.tmdb.org/t/p/w500{movie['poster_path']}" if movie.get("poster_path") else None,
+            providers=providers,  # Pass providers to the template
         )
     else:
         return render_template("result.html", error="No movies match your criteria. Please try again!")
+
 
 @app.route('/result/<movie_id>')
 def result(movie_id):
