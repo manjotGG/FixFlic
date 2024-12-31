@@ -49,3 +49,37 @@ def recommend_movie(genre_choice, year_choice):
 
     # Pick a random movie from the results
     return random.choice(movies)
+
+def get_movie_details(movie_id):
+    """Fetch movie details from TMDb."""
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}"
+    response = requests.get(url, params={"api_key": API_KEY})
+    if response.status_code == 200:
+        return response.json()
+    return None
+
+def get_watch_providers(movie_id):
+    """Fetch watch providers for a movie from TMDb API."""
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}/watch/providers"
+    params = {"api_key": TMDB_API_KEY}
+    
+    response = requests.get(url, params=params)
+    
+    if response.status_code != 200:
+        return {"streaming": [], "rent": [], "buy": []}
+    
+    data = response.json()
+    results = data.get("results", {})
+    # Adjust the region to match your requirements (e.g., "US")
+    region = results.get("US") or results.get("IN")  # Fallback to India if US data isn't available
+
+    if not region:
+        return {"streaming": [], "rent": [], "buy": []}
+
+    providers = {
+        "streaming": [item["provider_name"] for item in region.get("flatrate", [])],
+        "rent": [item["provider_name"] for item in region.get("rent", [])],
+        "buy": [item["provider_name"] for item in region.get("buy", [])],
+    }
+
+    return providers

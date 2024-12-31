@@ -49,6 +49,21 @@
             margin-top: 20px;
         }
 
+        .providers {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .providers h3 {
+            color: #007BFF;
+            font-size: 20px;
+        }
+
+        .providers p {
+            font-size: 16px;
+            color: #333;
+        }
+
         a {
             display: inline-block;
             background-color: #007BFF;
@@ -63,7 +78,6 @@
         a:hover {
             background-color: #0056b3;
         }
-
     </style>
 </head>
 <body>
@@ -81,6 +95,22 @@
             {% if poster_path %}
                 <img src="{{ poster_path }}" alt="Movie Poster">
             {% endif %}
+
+            <div class="providers">
+                <h3>Where to Watch:</h3>
+                {% if providers.streaming %}
+                    <p><strong>Streaming:</strong> {{ providers.streaming | join(", ") }}</p>
+                {% endif %}
+                {% if providers.rent %}
+                    <p><strong>Rent:</strong> {{ providers.rent | join(", ") }}</p>
+                {% endif %}
+                {% if providers.buy %}
+                    <p><strong>Buy:</strong> {{ providers.buy | join(", ") }}</p>
+                {% endif %}
+                {% if not providers.streaming and not providers.rent and not providers.buy %}
+                    <p>Sorry, no platforms available at the moment.</p>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 
