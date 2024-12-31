@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +11,16 @@
     <style>
         body {
             font-family: Arial, sans-serif, 'Helvetica Neue', Helvetica, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #2c2f38;
+            color: #f1f1f1;
             margin: 0;
             padding: 20px;
             text-align: center;
         }
 
         h1 {
-            color: #333;
+            color: #ffcc00;
+            font-size: 2.5em;
         }
 
         h2 {
@@ -26,12 +29,12 @@
 
         p {
             font-size: 16px;
-            color: #555;
+            color: #ccc;
             line-height: 1.5;
         }
 
         .movie-details {
-            background-color: white;
+            background-color: #3a3f47;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -53,7 +56,7 @@
         }
 
         .providers {
-            text-align: left;
+            text-align: center;
             margin-top: 20px;
         }
 
@@ -64,28 +67,79 @@
 
         .providers p {
             font-size: 16px;
-            color: #333;
+            color: #ccc;
         }
 
-        .provider-link {
+        .provider-button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        /* Gradient Button Styles */
+        .provider-button {
             display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 8px;
             text-decoration: none;
-            margin-top: 5px;
-            font-size: 16px;
+            font-size: 18px;
+            width: 200px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
         }
 
-        .provider-link:hover {
-            background-color: #0056b3;
+        .provider-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .provider-button.streaming {
+            background: linear-gradient(135deg, #4e73df, #3b4cd1);
+        }
+
+        .provider-button.rent {
+            background: linear-gradient(135deg, #1cc88a, #17a679);
+        }
+
+        .provider-button.buy {
+            background: linear-gradient(135deg, #f4b400, #e8a700);
+        }
+
+        /* Adding SVG Cloud effect */
+        .provider-button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: url('https://www.svgrepo.com/show/313273/cloud.svg') no-repeat center center;
+            background-size: 60%;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .provider-button.streaming::before {
+            background-color: #4e73df;
+        }
+
+        .provider-button.rent::before {
+            background-color: #1cc88a;
+        }
+
+        .provider-button.buy::before {
+            background-color: #f4b400;
         }
 
         a {
             display: inline-block;
-            background-color: #007BFF;
-            color: white;
+            background-color: #ffcc00;
+            color: #2c2f38;
             padding: 10px 20px;
             border-radius: 5px;
             text-decoration: none;
@@ -94,7 +148,7 @@
         }
 
         a:hover {
-            background-color: #0056b3;
+            background-color: #ff9900;
         }
 
         @media (max-width: 600px) {
@@ -110,13 +164,18 @@
                 font-size: 14px;
             }
 
-            .provider-link, a {
-                padding: 8px 15px;
-                font-size: 14px;
+            .provider-button-container {
+                flex-direction: column;
+            }
+
+            .provider-button {
+                width: 100%;
+                padding: 12px 20px;
             }
         }
     </style>
 </head>
+
 <body>
 
     <h1>FixFlic Movie Recommendation</h1>
@@ -128,32 +187,39 @@
             <h2>{{ title }}</h2>
             <p><strong>Release Date:</strong> {{ release_date }}</p>
             <p><strong>Overview:</strong> {{ overview }}</p>
-            
+
             {% if poster_path %}
                 <img src="{{ poster_path }}" alt="Movie Poster">
             {% endif %}
 
             <div class="providers">
                 <h3>Where to Watch:</h3>
+
                 {% if providers.streaming %}
                     <p><strong>Streaming:</strong></p>
-                    {% for provider, url in providers.streaming %}
-                        <a class="provider-link" href="{{ url }}" target="_blank">{{ provider }}</a><br>
-                    {% endfor %}
+                    <div class="provider-button-container">
+                        {% for provider, url in providers.streaming %}
+                            <a class="provider-button streaming" href="{{ 'http://' + url if url.startswith('http') else 'https://' + url }}" target="_blank">{{ provider }}</a>
+                        {% endfor %}
+                    </div>
                 {% endif %}
-                
+
                 {% if providers.rent %}
                     <p><strong>Rent:</strong></p>
-                    {% for provider, url in providers.rent %}
-                        <a class="provider-link" href="{{ url }}" target="_blank">{{ provider }}</a><br>
-                    {% endfor %}
+                    <div class="provider-button-container">
+                        {% for provider, url in providers.rent %}
+                            <a class="provider-button rent" href="{{ 'http://' + url if url.startswith('http') else 'https://' + url }}" target="_blank">{{ provider }}</a>
+                        {% endfor %}
+                    </div>
                 {% endif %}
-                
+
                 {% if providers.buy %}
                     <p><strong>Buy:</strong></p>
-                    {% for provider, url in providers.buy %}
-                        <a class="provider-link" href="{{ url }}" target="_blank">{{ provider }}</a><br>
-                    {% endfor %}
+                    <div class="provider-button-container">
+                        {% for provider, url in providers.buy %}
+                            <a class="provider-button buy" href="{{ 'http://' + url if url.startswith('http') else 'https://' + url }}" target="_blank">{{ provider }}</a>
+                        {% endfor %}
+                    </div>
                 {% endif %}
 
                 {% if not providers.streaming and not providers.rent and not providers.buy %}
@@ -166,4 +232,5 @@
     <a href="/">Take the Quiz Again</a>
 
 </body>
+
 </html>

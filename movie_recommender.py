@@ -4,6 +4,7 @@ import random
 TMDB_API_KEY = "fd75f2cbedc1bf37544712100425c13f"
 BASE_URL = "https://api.themoviedb.org/3"
 API_KEY = TMDB_API_KEY
+
 quiz = [
     {"question": "How is your mood today?", "options": ["Happy", "Normal", "Sad"]},
     {"question": "What kind of movie do you like?", "options": ["Comedy", "Action", "Comedy Romance"]},
@@ -11,18 +12,18 @@ quiz = [
 ]
 
 GENRE_MAP = {
-    1: 35,  # Comedy
-    2: 28,  # Action
-    3: 10749,  # Comedy Romance
+    1: 35,  
+    2: 28, 
+    3: 10749,  
 }
 
 YEAR_MAP = {
-    1: None,  # No year preference
-    2: (1990, 2000),  # Late 90s
-    3: (2015, 2024),  # Latest
+    1: None,  
+    2: (1990, 2000),  
+    3: (2015, 2024),  
 }
 
-def recommend_movie(genre_choice, year_choice):
+def recommend_movie(genre_choice, year_choice, mood_score):
     genre_id = GENRE_MAP.get(genre_choice)
     year_range = YEAR_MAP.get(year_choice)
 
@@ -36,7 +37,7 @@ def recommend_movie(genre_choice, year_choice):
         "primary_release_date.lte": f"{year_range[1]}-12-31" if year_range else None,
         "page": 1,
     }
-    params = {k: v for k, v in params.items() if v is not None}  # Remove None values
+    params = {k: v for k, v in params.items() if v is not None}  
 
     response = requests.get(url, params=params)
     if response.status_code != 200:
@@ -68,7 +69,7 @@ PROVIDER_URLS = {
     "Google Play Movies": "https://play.google.com/store/movies",
     "iTunes": "https://www.apple.com/itunes",
     "YouTube": "https://www.youtube.com",
-    # Add more mappings as needed
+    
 }
 
 def get_watch_providers(movie_id):
@@ -83,13 +84,13 @@ def get_watch_providers(movie_id):
     
     data = response.json()
     results = data.get("results", {})
-    # Adjust the region to match your requirements (e.g., "US")
-    region = results.get("US") or results.get("IN")  # Fallback to India if US data isn't available
+    
+    region = results.get("US") or results.get("IN")  
 
     if not region:
         return {"streaming": [], "rent": [], "buy": []}
 
-    # Extract providers and map their names to URLs
+    
     providers = {
         "streaming": [(item["provider_name"], PROVIDER_URLS.get(item["provider_name"], "#")) for item in region.get("flatrate", [])],
         "rent": [(item["provider_name"], PROVIDER_URLS.get(item["provider_name"], "#")) for item in region.get("rent", [])],

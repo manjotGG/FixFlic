@@ -12,12 +12,45 @@ def index():
 @app.route("/submit_quiz", methods=["POST"])
 def submit_quiz():
     # Retrieve user responses
-    mood = int(request.form.get("mood"))
-    genre = int(request.form.get("genre"))
-    year = int(request.form.get("year"))
+    mood = request.form.get("mood")  # 'happy', 'sad', 'neutral'
+    genre = request.form.get("genre")  # 'comedy', 'action', etc.
+    year = request.form.get("year")  # Year or range like '2020s'
 
-    # Fetch recommended movie
-    movie = recommend_movie(genre, year)
+    # Optional: Map mood to a numeric value if needed for recommendation
+    mood_score = None
+    if mood == 'happy':
+        mood_score = 1
+    elif mood == 'sad':
+        mood_score = 2
+    elif mood == 'neutral':
+        mood_score = 3
+
+    # Optional: Map genre to a numeric value if needed for recommendation
+    genre_mapping = {
+        'comedy': 1,
+        'action': 2,
+        'drama': 3,
+        'romance': 4,
+        'horror': 5,
+        'thriller': 6,
+        'sci-fi': 7,
+        # Add other genres as necessary
+    }
+    
+    genre_id = genre_mapping.get(genre, None)  # Default to None if genre is not in mapping
+
+    # Handle year input, checking if it's a range
+    if 's' in year:  # For cases like '2020s', '2010s'
+        base_year = int(year[:4])  # Get the base year (e.g., '2020' from '2020s')
+        year = base_year  # You could also decide to pick a middle year or a default year from the range
+    else:
+        try:
+            year = int(year)  # If it's a specific year, try to convert it to int
+        except ValueError:
+            year = 2020  # Fallback to a default year if conversion fails
+
+    # Fetch recommended movie based on genre, year, and mood_score
+    movie = recommend_movie(genre_id, year, mood_score)  # Pass genre_id and mood_score to recommendation logic
     if movie:
         # Get watch providers for the recommended movie
         providers = get_watch_providers(movie["id"]) if "id" in movie else {"streaming": [], "rent": [], "buy": []}

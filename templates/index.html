@@ -11,93 +11,104 @@
     <style>
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #111;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            transition: background-color 0.5s;
+            color: #fff;
+            background-image: linear-gradient(135deg, #111, #2c2c2c);
+            background-size: cover;
+            background-position: center;
+            transition: background-color 0.5s ease;
         }
 
         h1 {
-            color: #444;
+            color: #f5a623;
             text-align: center;
-            font-size: 2.5em;
+            font-size: 3em;
             margin-bottom: 30px;
-            font-weight: 600;
-            transition: color 0.5s;
+            font-weight: 700;
+            transition: color 0.5s ease;
         }
 
         form {
-            background-color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.75);
             border-radius: 10px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-            padding: 40px 30px;
-            max-width: 650px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
             width: 100%;
-            transition: all 0.5s;
+            max-width: 800px;
+            border: 1px solid rgba(255, 165, 35, 0.5);
+            transition: all 0.5s ease;
         }
 
         .question {
-            margin-bottom: 30px;
-            transition: margin-bottom 0.5s;
+            margin-bottom: 40px;
         }
 
         label {
-            font-size: 16px;
+            font-size: 18px;
             margin-left: 10px;
-            color: #555;
+            color: #ccc;
             cursor: pointer;
             display: block;
-            transition: color 0.3s;
+            transition: color 0.3s ease;
+            padding: 8px 0;
+        }
+
+        label:hover {
+            color: #f5a623;
         }
 
         input[type="radio"] {
             margin-right: 15px;
             cursor: pointer;
+            accent-color: #f5a623;
         }
 
         button {
-            background-color: #007bff;
+            background-color: #f5a623;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 12px 25px;
             font-size: 18px;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s, transform 0.3s;
+            margin-top: 15px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #ff8c00;
             transform: scale(1.05);
         }
 
         .question-text {
             font-weight: 500;
-            font-size: 20px;
+            font-size: 22px;
             margin-bottom: 15px;
-            color: #333;
+            color: #fff;
         }
 
         .question-text span {
-            color: #007bff;
+            color: #f5a623;
         }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2em;
+                font-size: 2.5em;
             }
 
             form {
-                padding: 30px 20px;
+                padding: 40px 25px;
             }
 
             .question-text {
-                font-size: 18px;
+                font-size: 20px;
             }
 
             button {
@@ -114,30 +125,66 @@
         <h1>FixFlic Quiz</h1>
 
         <form action="/submit_quiz" method="POST" onsubmit="return showLoading();">
-            {% for i, q in enumerate(quiz) %}
-            <div class="question">
-                <p class="question-text"><span>Q{{ i + 1 }}:</span> {{ q.question }}</p>
-                {% for j, option in enumerate(q.options) %}
-                <label>
-                    <input type="radio" name="{{ 'mood' if i == 0 else 'genre' if i == 1 else 'year' }}" value="{{ j + 1 }}" required>
-                    {{ option }}
+            <!-- Question 1: Mood with Emojis -->
+            <div class="question" id="question1">
+                <p class="question-text"><span>Q1:</span> How are you feeling?</p>
+                <label for="mood_happy">
+                    <input type="radio" id="mood_happy" name="mood" value="happy" required> 😊 Happy
                 </label>
-                {% endfor %}
+                <label for="mood_sad">
+                    <input type="radio" id="mood_sad" name="mood" value="sad" required> 😢 Sad
+                </label>
+                <label for="mood_neutral">
+                    <input type="radio" id="mood_neutral" name="mood" value="neutral" required> 😐 Neutral
+                </label>
+                <button type="button" onclick="nextQuestion('question1', 'question2')">Next</button>
             </div>
-            {% endfor %}
 
-            <button type="submit">Submit</button>
+            <!-- Question 2: Genre -->
+            <div class="question" id="question2" style="display: none;">
+                <p class="question-text"><span>Q2:</span> What genre of movie do you prefer?</p>
+                <label for="genre_action">
+                    <input type="radio" id="genre_action" name="genre" value="action" required> Action
+                </label>
+                <label for="genre_comedy">
+                    <input type="radio" id="genre_comedy" name="genre" value="comedy" required> Comedy
+                </label>
+                <label for="genre_drama">
+                    <input type="radio" id="genre_drama" name="genre" value="drama" required> Drama
+                </label>
+                <button type="button" onclick="nextQuestion('question2', 'question3')">Next</button>
+            </div>
+
+            <!-- Question 3: Year -->
+            <div class="question" id="question3" style="display: none;">
+                <p class="question-text"><span>Q3:</span> What time period of movies do you enjoy?</p>
+                <label for="year_2000s">
+                    <input type="radio" id="year_2000s" name="year" value="2000s" required> 2000s
+                </label>
+                <label for="year_2010s">
+                    <input type="radio" id="year_2010s" name="year" value="2010s" required> 2010s
+                </label>
+                <label for="year_2020s">
+                    <input type="radio" id="year_2020s" name="year" value="2020s" required> 2020s
+                </label>
+                <button type="submit">Submit</button>
+            </div>
         </form>
     </div>
 
     <script>
         function showLoading() {
-            document.body.style.backgroundColor = '#e0e0e0';
+            document.body.style.backgroundColor = '#2c2c2c';
             document.body.style.cursor = 'wait';
             setTimeout(() => {
                 alert('Your responses are being submitted. Thank you!');
             }, 1000);
             return true;
+        }
+
+        function nextQuestion(currentId, nextId) {
+            document.getElementById(currentId).style.display = 'none';
+            document.getElementById(nextId).style.display = 'block';
         }
     </script>
 
