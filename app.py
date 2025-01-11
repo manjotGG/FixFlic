@@ -9,6 +9,10 @@ app = Flask(__name__)
 def index():
     return render_template("index.html", quiz=quiz)
 
+@app.route('/makers')
+def makers():
+    return render_template('makers.html')
+
 @app.route("/submit_quiz", methods=["POST"])
 def submit_quiz():
     # Retrieve user responses
